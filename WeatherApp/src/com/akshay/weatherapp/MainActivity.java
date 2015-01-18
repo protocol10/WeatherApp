@@ -1,9 +1,13 @@
 package com.akshay.weatherapp;
 
 import java.text.DecimalFormat;
+import java.util.List;
 
+import com.akshay.weatherapp.adapter.ForeCastAdpter;
+import com.akshay.weatherapp.callback.OnGetDailyForeCastCallBack;
 import com.akshay.weatherapp.callback.OnGetWeatherCallBack;
 import com.akshay.weatherapp.core.WeatherAppApi;
+import com.akshay.weatherapp.core.models.ForeCast;
 import com.akshay.weatherapp.core.models.Weather;
 import com.akshay.weatherapp.utils.WeatherAppUtils;
 import com.google.android.gms.common.ConnectionResult;
@@ -23,6 +27,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class MainActivity extends ActionBarActivity implements OnClickListener {
@@ -32,12 +38,15 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 			lblHumidity, lblWind, lblWindDegree;
 	private EditText txtCity;
 	private Button btnSubmit, btnLocation;
-
-	private String cityStr, temperatureStr, locationStr;
+	private ListView listView;
+	private LinearLayout layoutTemperature;
 	private Context context;
 	private ProgressDialog progressDialog;
 
 	private LocationClient locationClient;
+
+	private ForeCastAdpter adapter;
+	private String cityStr, temperatureStr, locationStr;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +54,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		setContentView(R.layout.activity_main);
 		context = this;
 
+		layoutTemperature = (LinearLayout) findViewById(R.id.layout_temp);
 		lblTemperature = (TextView) findViewById(R.id.lbl_temperature);
 		lblLocation = (TextView) findViewById(R.id.lbl_location);
 		lblPressure = (TextView) findViewById(R.id.lbl_pressure);
@@ -52,6 +62,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		lblHumidity = (TextView) findViewById(R.id.lbl_humidity);
 		lblWind = (TextView) findViewById(R.id.lbl_wind);
 		lblWindDegree = (TextView) findViewById(R.id.lbl_wind_degree);
+
+		listView = (ListView) findViewById(R.id.list_forecast);
 
 		int res = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
 		if (res == ConnectionResult.SUCCESS) {
@@ -77,25 +89,11 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 					});
 			locationClient.connect();
 		}
-		clearAll();
 		txtCity = (EditText) findViewById(R.id.txt_city);
 		btnSubmit = (Button) findViewById(R.id.btn_submit);
 		btnLocation = (Button) findViewById(R.id.btn_location);
 		btnLocation.setOnClickListener(this);
 		btnSubmit.setOnClickListener(this);
-	}
-
-	/**
-	 * Method to clear all TextField.
-	 */
-	private void clearAll() {
-		lblLocation.setText("");
-		lblTemperature.setText("");
-		lblPressure.setText("");
-		lblDescription.setText("");
-		lblHumidity.setText("");
-		lblWind.setText("");
-		lblWindDegree.setText("");
 	}
 
 	@Override
@@ -121,6 +119,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 			cityStr = txtCity.getText().toString();
 			if (cityStr.length() != 0) {
 				retriveWeather(context, cityStr);
+				retriveWeatherForeCast(cityStr);
 
 			} else {
 				WeatherAppUtils.showMessage(getApplicationContext(),
@@ -131,8 +130,10 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 			if (locationClient != null && locationClient.isConnected()) {
 				Location loc = locationClient.getLastLocation();
 				if (loc != null) {
-					retriveWeather(context, loc.getLatitude(),
-							loc.getLongitude());
+					double latitude = loc.getLatitude();
+					double longitude = loc.getLongitude();
+					retriveWeather(context, latitude, longitude);
+					retriveWeatherForeCast(latitude, longitude);
 				}
 
 			}
@@ -142,14 +143,93 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		}
 	}
 
+	/**
+	 * Method to retrieve weather forecast based on current location
+	 * 
+	 * @param latitude
+	 * @param longitude
+	 */
+	private void retriveWeatherForeCast(double latitude, double longitude) {
+		WeatherAppApi.retrieveWeatherForeCast(latitude, longitude,
+				new OnGetDailyForeCastCallBack() {
+
+					@Override
+					public void onSuccess(List<ForeCast> list) {
+						updateUI(list);
+
+					}
+
+					@Override
+					public void onStatusFailure(String message) {
+						WeatherAppUtils.showMessage(getApplicationContext(),
+								message);
+
+					}
+
+					@Override
+					public void onFailure(String message) {
+						WeatherAppUtils.showMessage(getApplicationContext(),
+								message);
+
+					}
+				});
+
+	}
+
+	/**
+	 * Method to update the ListView.
+	 * 
+	 * @param list
+	 */
+	protected void updateUI(List<ForeCast> list) {
+		dismissProgressDialog();
+		adapter = new ForeCastAdpter(context, R.layout.row_forecast,
+				R.id.lbl_day, list);
+		listView.setAdapter(adapter);
+	}
+
+	/**
+	 *
+	 * Method to retrieve weather forecast based on City Name.
+	 * 
+	 * @param city
+	 */
+	private void retriveWeatherForeCast(String city) {
+		WeatherAppApi.retrieveWeatherForeCast(city,
+				new OnGetDailyForeCastCallBack() {
+
+					@Override
+					public void onSuccess(List<ForeCast> list) {
+						dismissProgressDialog();
+						updateUI(list);
+					}
+
+					@Override
+					public void onStatusFailure(String message) {
+						WeatherAppUtils.showMessage(getApplicationContext(),
+								message);
+					}
+
+					@Override
+					public void onFailure(String message) {
+						WeatherAppUtils.showMessage(getApplicationContext(),
+								message);
+					}
+				});
+
+	}
+
 	protected void updateUI(Weather weather) {
 		if (weather != null) {
-			dismissProgressDialog();
+			if (layoutTemperature.getVisibility() == View.GONE)
+				layoutTemperature.setVisibility(View.VISIBLE);
+
 			DecimalFormat decimalFormat = new DecimalFormat("#0.00");
 			locationStr = weather.getCityStr() + ", " + weather.getCountryStr();
 			lblLocation.setText(locationStr.toString());
-			temperatureStr = decimalFormat.format(weather.getMaxTemp()) + "/"
-					+ decimalFormat.format(weather.getMinTemp()) + " \u2103";
+			temperatureStr = decimalFormat.format(weather.getTemperature())
+					+ "\u2103";
+			lblPressure.setText(weather.getPressure() + " mb");
 			lblTemperature.setText(temperatureStr);
 			lblHumidity.setText(weather.getHumidity() + " %");
 			lblWind.setText(weather.getWindSpeed() + " mph");
@@ -167,7 +247,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 	 */
 	private void retriveWeather(Context c, String city) {
 		showProgressDialog(c);
-		WeatherAppApi.retriveWeatherByCity(c, city, new OnGetWeatherCallBack() {
+		WeatherAppApi.retriveWeatherByCity(city, new OnGetWeatherCallBack() {
 
 			@Override
 			public void onSuccess(Weather weather) {
@@ -197,7 +277,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 	 */
 	private void retriveWeather(Context c, double latitude, double longitude) {
 		showProgressDialog(c);
-		WeatherAppApi.retriveWeatherByCity(c, latitude, longitude,
+		WeatherAppApi.retriveWeatherByCity(latitude, longitude,
 				new OnGetWeatherCallBack() {
 
 					@Override

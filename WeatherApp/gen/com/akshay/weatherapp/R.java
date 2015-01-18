@@ -2031,7 +2031,7 @@ containing a value of this type.
         public static final int action_mode_bar=0x7f0b0041;
         public static final int action_mode_bar_stub=0x7f0b0040;
         public static final int action_mode_close_button=0x7f0b0033;
-        public static final int action_settings=0x7f0b005d;
+        public static final int action_settings=0x7f0b0069;
         public static final int activity_chooser_view_content=0x7f0b0034;
         public static final int always=0x7f0b0025;
         public static final int beginning=0x7f0b002c;
@@ -2064,14 +2064,26 @@ containing a value of this type.
         public static final int ifRoom=0x7f0b0027;
         public static final int image=0x7f0b0036;
         public static final int layout_form=0x7f0b0052;
-        public static final int lbl_description=0x7f0b0058;
-        public static final int lbl_humidity=0x7f0b0059;
-        public static final int lbl_location=0x7f0b0056;
-        public static final int lbl_pressure=0x7f0b005a;
-        public static final int lbl_temperature=0x7f0b0057;
-        public static final int lbl_wind=0x7f0b005b;
-        public static final int lbl_wind_degree=0x7f0b005c;
+        public static final int layout_temp=0x7f0b0057;
+        public static final int lbl_daily_humidity=0x7f0b0065;
+        public static final int lbl_daily_pressure=0x7f0b0066;
+        public static final int lbl_daily_wind=0x7f0b0067;
+        public static final int lbl_daily_wind_degree=0x7f0b0068;
+        public static final int lbl_date=0x7f0b0056;
+        public static final int lbl_day=0x7f0b0061;
+        public static final int lbl_description=0x7f0b005a;
+        public static final int lbl_even=0x7f0b0063;
+        public static final int lbl_forecast_date=0x7f0b0060;
+        public static final int lbl_humidity=0x7f0b005b;
+        public static final int lbl_location=0x7f0b0058;
+        public static final int lbl_morn=0x7f0b0062;
+        public static final int lbl_night=0x7f0b0064;
+        public static final int lbl_pressure=0x7f0b005c;
+        public static final int lbl_temperature=0x7f0b0059;
+        public static final int lbl_wind=0x7f0b005d;
+        public static final int lbl_wind_degree=0x7f0b005e;
         public static final int listMode=0x7f0b001d;
+        public static final int list_forecast=0x7f0b005f;
         public static final int list_item=0x7f0b0038;
         public static final int match_parent=0x7f0b0015;
         public static final int middle=0x7f0b002e;
@@ -2164,7 +2176,8 @@ containing a value of this type.
         public static final int abc_search_view=0x7f030015;
         public static final int abc_simple_dropdown_hint=0x7f030016;
         public static final int activity_main=0x7f030017;
-        public static final int support_simple_spinner_dropdown_item=0x7f030018;
+        public static final int row_forecast=0x7f030018;
+        public static final int support_simple_spinner_dropdown_item=0x7f030019;
     }
     public static final class menu {
         public static final int main=0x7f0c0000;
@@ -2226,7 +2239,7 @@ containing a value of this type.
         public static final int accept=0x7f060002;
         public static final int action_settings=0x7f060034;
         public static final int app_name=0x7f060032;
-        public static final int btn_location=0x7f06003d;
+        public static final int btn_location=0x7f060043;
         /**   Text for notification shown when the Android Wear apps needs to be updated. Only shown on the wearable. [CHAR LIMIT=NONE] 
          */
         public static final int common_android_wear_notification_needs_update_text=0x7f060009;
@@ -2330,10 +2343,16 @@ containing a value of this type.
         public static final int create_calendar_title=0x7f060004;
         public static final int decline=0x7f060003;
         public static final int hello_world=0x7f060033;
+        public static final int label_day=0x7f06003f;
+        public static final int label_deg=0x7f06003e;
         public static final int label_description=0x7f06003a;
+        public static final int label_eve=0x7f060040;
         public static final int label_humidity=0x7f060039;
         public static final int label_location=0x7f060037;
+        public static final int label_morn=0x7f060041;
+        public static final int label_night=0x7f060042;
         public static final int label_pressure=0x7f06003b;
+        public static final int label_speed=0x7f06003d;
         public static final int label_submit=0x7f060036;
         public static final int label_temperature=0x7f060038;
         public static final int label_wind=0x7f06003c;

@@ -12,6 +12,12 @@
     <string name="label_description">Description</string>
     <string name="label_pressure">Pressure</string>
     <string name="label_wind">Wind</string>
+    <string name="label_speed">Speed</string>
+    <string name="label_deg">Degree</string>
+    <string name="label_day">Day</string>
+    <string name="label_eve">Evening</string>
+    <string name="label_morn">Morning</string>
+    <string name="label_night">Night</string>
     <string name="btn_location">Get My Location</string>
 
 </resources>

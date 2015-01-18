@@ -4,7 +4,10 @@ public class Weather {
 
 	String cityStr, countryStr, weatherStr, description;
 
-	double pressure, humidity, windDegree, minTemp, maxTemp, windSpeed;
+	double pressure, humidity, windDegree, temperature, windSpeed;
+
+	public Weather() {
+	}
 
 	public String getCityStr() {
 		return cityStr;
@@ -28,6 +31,14 @@ public class Weather {
 
 	public void setWeatherStr(String weatherStr) {
 		this.weatherStr = weatherStr;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public double getPressure() {
@@ -54,20 +65,12 @@ public class Weather {
 		this.windDegree = windDegree;
 	}
 
-	public double getMinTemp() {
-		return minTemp;
+	public double getTemperature() {
+		return temperature;
 	}
 
-	public void setMinTemp(double minTemp) {
-		this.minTemp = minTemp;
-	}
-
-	public double getMaxTemp() {
-		return maxTemp;
-	}
-
-	public void setMaxTemp(double maxTemp) {
-		this.maxTemp = maxTemp;
+	public void setTemperature(double temperature) {
+		this.temperature = temperature;
 	}
 
 	public double getWindSpeed() {
@@ -78,11 +81,4 @@ public class Weather {
 		this.windSpeed = windSpeed;
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
 }
