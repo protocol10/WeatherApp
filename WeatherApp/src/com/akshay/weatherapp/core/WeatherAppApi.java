@@ -265,7 +265,7 @@ public class WeatherAppApi {
 	public static void retrieveWeatherForeCast(double latitude,
 			double longitude, final OnGetDailyForeCastCallBack mCallBack) {
 		String url = URL_FORECAST_GEO + "lat=" + latitude + "&lon=" + longitude
-				+ "&cnt=10";
+				+ "&cnt=14" + "&APPID";
 		client.post(url, new JsonHttpResponseHandler() {
 			@Override
 			public void onSuccess(int statusCode, Header[] headers,

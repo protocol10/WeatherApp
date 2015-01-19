@@ -135,7 +135,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 					retriveWeather(context, latitude, longitude);
 					retriveWeatherForeCast(latitude, longitude);
 				}
-
 			}
 			break;
 		default:
@@ -156,36 +155,23 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 					@Override
 					public void onSuccess(List<ForeCast> list) {
 						updateUI(list);
-
 					}
 
 					@Override
 					public void onStatusFailure(String message) {
+						dismissProgressDialog();
 						WeatherAppUtils.showMessage(getApplicationContext(),
 								message);
-
 					}
 
 					@Override
 					public void onFailure(String message) {
+						dismissProgressDialog();
 						WeatherAppUtils.showMessage(getApplicationContext(),
 								message);
-
 					}
 				});
 
-	}
-
-	/**
-	 * Method to update the ListView.
-	 * 
-	 * @param list
-	 */
-	protected void updateUI(List<ForeCast> list) {
-		dismissProgressDialog();
-		adapter = new ForeCastAdpter(context, R.layout.row_forecast,
-				R.id.lbl_day, list);
-		listView.setAdapter(adapter);
 	}
 
 	/**
@@ -200,18 +186,19 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 
 					@Override
 					public void onSuccess(List<ForeCast> list) {
-						dismissProgressDialog();
 						updateUI(list);
 					}
 
 					@Override
 					public void onStatusFailure(String message) {
+						dismissProgressDialog();
 						WeatherAppUtils.showMessage(getApplicationContext(),
 								message);
 					}
 
 					@Override
 					public void onFailure(String message) {
+						dismissProgressDialog();
 						WeatherAppUtils.showMessage(getApplicationContext(),
 								message);
 					}
@@ -219,6 +206,11 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 
 	}
 
+	/**
+	 * Method to update all the TextView.
+	 * 
+	 * @param weather
+	 */
 	protected void updateUI(Weather weather) {
 		if (weather != null) {
 			if (layoutTemperature.getVisibility() == View.GONE)
@@ -237,6 +229,18 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 					+ " \u00b0");
 			lblDescription.setText(weather.getDescription());
 		}
+	}
+
+	/**
+	 * Method to update the ListView.
+	 * 
+	 * @param list
+	 */
+	protected void updateUI(List<ForeCast> list) {
+		dismissProgressDialog();
+		adapter = new ForeCastAdpter(context, R.layout.row_forecast,
+				R.id.lbl_day, list);
+		listView.setAdapter(adapter);
 	}
 
 	/**
@@ -287,12 +291,14 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 
 					@Override
 					public void onStatusFailure(String message) {
+						dismissProgressDialog();
 						WeatherAppUtils.showMessage(getApplicationContext(),
 								message);
 					}
 
 					@Override
 					public void onFailure(String message) {
+						dismissProgressDialog();
 						WeatherAppUtils.showMessage(getApplicationContext(),
 								message);
 					}
@@ -317,7 +323,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 	 * Method to dismiss Progress Dialog.
 	 */
 	private void dismissProgressDialog() {
-		progressDialog.dismiss();
+		if (progressDialog != null)
+			progressDialog.dismiss();
 	}
 
 	@Override
